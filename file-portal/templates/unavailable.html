@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Unavailable · File Portal{% endblock %}
+{% block content %}
+<section class="card center">
+  {% if status == "expired" %}
+    <h2>⌛ This file has expired</h2>
+    <p>The link is no longer valid and the file has been removed.</p>
+  {% else %}
+    <h2>🔍 File not found</h2>
+    <p>Check the access code and try again. Expired files are removed automatically.</p>
+  {% endif %}
+  <a class="button" href="{{ url_for('index') }}">Back to home</a>
+</section>
+{% endblock %}

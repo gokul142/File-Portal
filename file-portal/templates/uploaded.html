@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Uploaded · File Portal{% endblock %}
+{% block content %}
+<section class="card center">
+  <h2>✅ Upload complete</h2>
+  <p><strong>{{ result.filename }}</strong> is ready to share.</p>
+  <p class="muted">Access code</p>
+  <div class="code-display" id="code">{{ result.access_code }}</div>
+  <p class="muted">Share link</p>
+  <div class="share">
+    <input type="text" readonly value="{{ share_url }}" id="share-url">
+    <button type="button" onclick="copyLink()">Copy</button>
+  </div>
+  <p>Expires at <strong>{{ result.expires_at | datetime }}</strong>
+     (<span class="countdown" data-expires="{{ result.expires_at }}"></span>)</p>
+  <a class="button secondary" href="{{ url_for('index') }}">Upload another</a>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='countdown.js') }}"></script>
+<script>
+  function copyLink() {
+    const el = document.getElementById('share-url');
+    el.select();
+    navigator.clipboard ? navigator.clipboard.writeText(el.value) : document.execCommand('copy');
+  }
+</script>
+{% endblock %}

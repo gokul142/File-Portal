@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ record.filename }} · File Portal{% endblock %}
+{% block content %}
+<section class="card center">
+  <h2>📄 {{ record.filename }}</h2>
+  <p class="muted">Access code: <code>{{ record.access_code }}</code></p>
+  <p>Uploaded {{ record.created_at | datetime }}</p>
+  <p>Expires {{ record.expires_at | datetime }}
+     (<span class="countdown" data-expires="{{ record.expires_at }}"></span>)</p>
+  <a class="button" id="download-btn" href="{{ url_for('download', code=record.access_code) }}">Download</a>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='countdown.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid">
+  <section class="card">
+    <h2>Upload a file</h2>
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+      <label class="dropzone" id="dropzone">
+        <input type="file" name="file" id="file" required>
+        <span id="file-label">Click to choose a file or drag it here</span>
+      </label>
+      <label for="expiry_minutes">Expires after (minutes)</label>
+      <input type="number" id="expiry_minutes" name="expiry_minutes"
+             value="{{ default_expiry }}" min="{{ min_expiry }}" max="{{ max_expiry }}" required>
+      <button type="submit">Upload</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Retrieve a file</h2>
+    <form action="{{ url_for('retrieve') }}" method="get">
+      <label for="code">Access code</label>
+      <input type="text" id="code" name="code" placeholder="e.g. ABCD2345"
+             autocomplete="off" maxlength="16" required class="code-input">
+      <button type="submit">Find file</button>
+    </form>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  const input = document.getElementById('file');
+  const label = document.getElementById('file-label');
+  const zone = document.getElementById('dropzone');
+  input.addEventListener('change', () => {
+    label.textContent = input.files.length ? input.files[0].name : 'Click to choose a file or drag it here';
+  });
+  ['dragover', 'dragenter'].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(e => zone.addEventListener(e, () => zone.classList.remove('over')));
+  zone.addEventListener('drop', ev => {
+    ev.preventDefault();
+    input.files = ev.dataTransfer.files;
+    input.dispatchEvent(new Event('change'));
+  });
+</script>
+{% endblock %}
